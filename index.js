@@ -9,19 +9,19 @@ app.use(express.json());
 app.post("/users", async (req, res) => {
   const { name, email } = req.body;
   try {
-    const isExist = await prisma.user.findUnique({
-      where: { email },
-    });
-    if (isExist) {
-      throw new Error("User with this email and name already exists");
-    }
-
     // const isExist = //sql server when you query at the table must be escaped with []
     //   await prisma.$queryRaw`SELECT * FROM [User] WHERE email = ${email}`;
     // console.log({ isExist });
     // if (isExist.length > 0) {
     //   throw new Error("User with this email and name already exists");
     // }
+
+    const isExist = await prisma.user.findUnique({
+      where: { email },
+    });
+    if (isExist) {
+      throw new Error("User with this email and name already exists");
+    }
 
     const user = await prisma.user.create({
       data: { name, email },
